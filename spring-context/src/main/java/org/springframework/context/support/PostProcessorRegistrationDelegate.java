@@ -52,6 +52,10 @@ class PostProcessorRegistrationDelegate {
 	public static void invokeBeanFactoryPostProcessors(
 			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {
 
+		// 1.19 postProcessor主要有两种：BeanDefinitionRegistryPostProcessor 和 BeanFactoryPostProcessor
+        // 对于前者，有两个方法需要调用postProcessBeanDefinitionRegistry, postProcessBeanFactory
+		// 对于后者，有一个方法需要调用postProcessBeanFactory
+
 		// Invoke BeanDefinitionRegistryPostProcessors first, if any.
 		Set<String> processedBeans = new HashSet<String>();
 
@@ -90,6 +94,7 @@ class PostProcessorRegistrationDelegate {
 			}
 			sortPostProcessors(beanFactory, priorityOrderedPostProcessors);
 			registryPostProcessors.addAll(priorityOrderedPostProcessors);
+			// 2.4  先调用postProcessBeanDefinitionRegistry
 			invokeBeanDefinitionRegistryPostProcessors(priorityOrderedPostProcessors, registry);
 
 			// Next, invoke the BeanDefinitionRegistryPostProcessors that implement Ordered.
@@ -122,6 +127,7 @@ class PostProcessorRegistrationDelegate {
 			}
 
 			// Now, invoke the postProcessBeanFactory callback of all processors handled so far.
+			// 2.13 再调用postProcessBeanFactory
 			invokeBeanFactoryPostProcessors(registryPostProcessors, beanFactory);
 			invokeBeanFactoryPostProcessors(regularPostProcessors, beanFactory);
 		}

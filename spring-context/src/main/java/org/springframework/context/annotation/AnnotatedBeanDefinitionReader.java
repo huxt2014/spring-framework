@@ -80,6 +80,15 @@ public class AnnotatedBeanDefinitionReader {
 		Assert.notNull(environment, "Environment must not be null");
 		this.registry = registry;
 		this.conditionEvaluator = new ConditionEvaluator(registry, environment, null);
+		// 相当于<context:annotation-config />
+		// 1.3 初始化AnnotatedBeanDefinitionReader的时候将一些默认的class包装成RootBeanDefinition注册到factory中，包括：
+		//    2.1 ConfigurationClassPostProcessor - BeanFactoryPostProcessor
+		//    5.2 AutowiredAnnotationBeanPostProcessor
+		//    RequiredAnnotationBeanPostProcessor
+		//    CommonAnnotationBeanPostProcessor - 能够处理@Resourse
+		//    PersistenceAnnotationBeanPostProcessor
+		//    EventListenerMethodProcessor
+		//    DefaultEventListenerFactory
 		AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry);
 	}
 
