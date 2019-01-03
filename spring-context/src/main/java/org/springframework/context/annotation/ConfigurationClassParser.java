@@ -163,6 +163,7 @@ class ConfigurationClassParser {
 		for (BeanDefinitionHolder holder : configCandidates) {
 			BeanDefinition bd = holder.getBeanDefinition();
 			try {
+				// 2.10 开始解析一个bean
 				if (bd instanceof AnnotatedBeanDefinition) {
 					parse(((AnnotatedBeanDefinition) bd).getMetadata(), holder.getBeanName());
 				}
@@ -236,6 +237,7 @@ class ConfigurationClassParser {
 			}
 		}
 
+		// 2.11 从class到super class都会解析
 		// Recursively process the configuration class and its superclass hierarchy.
 		SourceClass sourceClass = asSourceClass(configClass);
 		do {
@@ -259,6 +261,7 @@ class ConfigurationClassParser {
 			throws IOException {
 
 		if (configClass.getMetadata().isAnnotated(Component.class.getName())) {
+		    // 2.12 具体解析class的函数
 			// Recursively process any member (nested) classes first
 			processMemberClasses(configClass, sourceClass);
 		}
