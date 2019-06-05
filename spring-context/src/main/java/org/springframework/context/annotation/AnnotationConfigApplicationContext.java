@@ -67,7 +67,7 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 		 * 5.1 Autowired注解本质上是一种配置。GenericApplicationContext不直接实现配置的加载，而是委托给了其他类。
 		 */
 		this.reader = new AnnotatedBeanDefinitionReader(this);
-		// 1.4 初始化一个scanner
+		// 1.3 初始化一个scanner
 		this.scanner = new ClassPathBeanDefinitionScanner(this);
 	}
 
@@ -90,9 +90,9 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	public AnnotationConfigApplicationContext(Class<?>... annotatedClasses) {
 		// 1.1 在这之前，父类中会创建一个DefaultListableBeanFactory、获得Environment、获得classloader。
 		this();
-		// 1.5 用reader将annotatedClasses注册为bean，注册的是AnnotatedGenericBeanDefinition
+		// 1.4 用reader将annotatedClasses注册为bean，注册的是AnnotatedGenericBeanDefinition
 		register(annotatedClasses);
-		// 1.6 刷新一下，这里做了很多工作。
+		// 1.5 自动刷新一下，这里做了很多工作。
 		refresh();
 	}
 

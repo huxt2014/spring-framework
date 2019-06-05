@@ -55,7 +55,7 @@ final class PostProcessorRegistrationDelegate {
 	public static void invokeBeanFactoryPostProcessors(
 			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {
 
-		// 1.19 postProcessor主要有两种：BeanDefinitionRegistryPostProcessor 和 BeanFactoryPostProcessor
+		// 1.18 postProcessor主要有两种：BeanDefinitionRegistryPostProcessor 和 BeanFactoryPostProcessor
         // 对于前者，有两个方法需要调用postProcessBeanDefinitionRegistry, postProcessBeanFactory
 		// 对于后者，有一个方法需要调用postProcessBeanFactory
 

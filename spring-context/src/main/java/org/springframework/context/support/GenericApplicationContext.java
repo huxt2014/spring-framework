@@ -262,7 +262,7 @@ public class GenericApplicationContext extends AbstractApplicationContext implem
 	 */
 	@Override
 	protected final void refreshBeanFactory() throws IllegalStateException {
-		// 1.12 初始化Context的时候会refresh register，但实际上啥都没做，并且只能refresh一次。
+		// 1.10 初始化Context的时候会refresh register，但实际上啥都没做，并且只能refresh一次。
 		if (!this.refreshed.compareAndSet(false, true)) {
 			throw new IllegalStateException(
 					"GenericApplicationContext does not support multiple refresh attempts: just call 'refresh' once");
