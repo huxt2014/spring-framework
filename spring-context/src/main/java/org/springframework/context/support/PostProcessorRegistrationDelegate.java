@@ -58,6 +58,8 @@ final class PostProcessorRegistrationDelegate {
 		// 1.18 postProcessor主要有两种：BeanDefinitionRegistryPostProcessor 和 BeanFactoryPostProcessor
         // 对于前者，有两个方法需要调用postProcessBeanDefinitionRegistry, postProcessBeanFactory
 		// 对于后者，有一个方法需要调用postProcessBeanFactory
+		// postProcessor的来源有两个，一个是参数传入进来的，另外一个是已经注入到registry中的。第一种貌似不会调用
+		// postProcessBeanDefinitionRegistry接口，可能在其他地方已经调用过了。
 
 		// Invoke BeanDefinitionRegistryPostProcessors first, if any.
 		Set<String> processedBeans = new HashSet<>();
@@ -132,7 +134,7 @@ final class PostProcessorRegistrationDelegate {
 			}
 
 			// Now, invoke the postProcessBeanFactory callback of all processors handled so far.
-			// 2.13 再调用postProcessBeanFactory
+			// 2.9 再调用postProcessBeanFactory
 			invokeBeanFactoryPostProcessors(registryProcessors, beanFactory);
 			invokeBeanFactoryPostProcessors(regularPostProcessors, beanFactory);
 		}

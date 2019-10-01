@@ -85,14 +85,15 @@ public class AnnotatedBeanDefinitionReader {
 		this.registry = registry;
 		this.conditionEvaluator = new ConditionEvaluator(registry, environment, null);
 		// 相当于<context:annotation-config />
-		// 1.2.1 初始化AnnotatedBeanDefinitionReader的时候将一些默认的class包装成RootBeanDefinition注册到factory中，包括：
-		//    2.1 ConfigurationClassPostProcessor - BeanFactoryPostProcessor
-		//    5.2 AutowiredAnnotationBeanPostProcessor
+		// 1.2.1 初始化的时候将一些默认的class包装成RootBeanDefinition注册到factory中，包括：
+		//    2.1 ConfigurationClassPostProcessor - BeanDefinitionRegistryPostProcessor, BeanFactoryPostProcessor
+		//    5.2 AutowiredAnnotationBeanPostProcessor - MergedBeanDefinitionPostProcessor, BeanPostProcessor
 		//    RequiredAnnotationBeanPostProcessor
-		//    CommonAnnotationBeanPostProcessor - 能够处理@Resourse
+		//    CommonAnnotationBeanPostProcessor(能够处理@Resourse) - InstantiationAwareBeanPostProcessor, BeanPostProcessor
 		//    PersistenceAnnotationBeanPostProcessor
-		//    EventListenerMethodProcessor
+		//    EventListenerMethodProcessor - BeanFactoryPostProcessor
 		//    DefaultEventListenerFactory
+		// 这些默认注册的processor在程序启动、运行时有很大的作用。
 		AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry);
 	}
 

@@ -163,7 +163,7 @@ class ConfigurationClassParser {
 		for (BeanDefinitionHolder holder : configCandidates) {
 			BeanDefinition bd = holder.getBeanDefinition();
 			try {
-				// 2.10 开始解析一个bean
+				// 2.8.1 开始解析一个bean
 				if (bd instanceof AnnotatedBeanDefinition) {
 					parse(((AnnotatedBeanDefinition) bd).getMetadata(), holder.getBeanName());
 				}
@@ -237,7 +237,7 @@ class ConfigurationClassParser {
 			}
 		}
 
-		// 2.11 从class到super class都会解析
+		// 2.8.2 从class到super class都会解析
 		// Recursively process the configuration class and its superclass hierarchy.
 		SourceClass sourceClass = asSourceClass(configClass);
 		do {
@@ -260,8 +260,8 @@ class ConfigurationClassParser {
 	protected final SourceClass doProcessConfigurationClass(ConfigurationClass configClass, SourceClass sourceClass)
 			throws IOException {
 
+		// 2.8.3 先把nested classes完整地走一遍(2.8.2)
 		if (configClass.getMetadata().isAnnotated(Component.class.getName())) {
-		    // 2.12 具体解析class的函数
 			// Recursively process any member (nested) classes first
 			processMemberClasses(configClass, sourceClass);
 		}
@@ -280,6 +280,7 @@ class ConfigurationClassParser {
 		}
 
 		// Process any @ComponentScan annotations
+		// 2.8.4 如果这个class被@ComponentScan，那么遍历这个类引用的bean，把配置相关的类走一遍（2.8.2）
 		Set<AnnotationAttributes> componentScans = AnnotationConfigUtils.attributesForRepeatable(
 				sourceClass.getMetadata(), ComponentScans.class, ComponentScan.class);
 		if (!componentScans.isEmpty() &&
@@ -302,6 +303,7 @@ class ConfigurationClassParser {
 		}
 
 		// Process any @Import annotations
+		// 2.8.5 处理@Import
 		processImports(configClass, sourceClass, getImports(sourceClass), true);
 
 		// Process any @ImportResource annotations
@@ -317,6 +319,7 @@ class ConfigurationClassParser {
 		}
 
 		// Process individual @Bean methods
+		// 2.8.6 处理@Bean methods
 		Set<MethodMetadata> beanMethods = retrieveBeanMethodMetadata(sourceClass);
 		for (MethodMetadata methodMetadata : beanMethods) {
 			configClass.addBeanMethod(new BeanMethod(methodMetadata, configClass));
