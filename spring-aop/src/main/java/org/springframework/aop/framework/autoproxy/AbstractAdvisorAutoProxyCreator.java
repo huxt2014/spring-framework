@@ -53,6 +53,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 	private BeanFactoryAdvisorRetrievalHelper advisorRetrievalHelper;
 
 
+	// 7.2 因为是BeanFactoryAware，所以自己生成实例的时候会调用这个函数
 	@Override
 	public void setBeanFactory(BeanFactory beanFactory) {
 		super.setBeanFactory(beanFactory);
@@ -64,6 +65,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 	}
 
 	protected void initBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+		// 7.2.1 初始化一个helper
 		this.advisorRetrievalHelper = new BeanFactoryAdvisorRetrievalHelperAdapter(beanFactory);
 	}
 
@@ -91,8 +93,11 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 	 * @see #extendAdvisors
 	 */
 	protected List<Advisor> findEligibleAdvisors(Class<?> beanClass, String beanName) {
+		// 7.5.1 找到所有的advisor
 		List<Advisor> candidateAdvisors = findCandidateAdvisors();
+		// 7.5.4 过滤一遍
 		List<Advisor> eligibleAdvisors = findAdvisorsThatCanApply(candidateAdvisors, beanClass, beanName);
+		// 7.5.5 加一个额外的东西
 		extendAdvisors(eligibleAdvisors);
 		if (!eligibleAdvisors.isEmpty()) {
 			eligibleAdvisors = sortAdvisors(eligibleAdvisors);
@@ -106,6 +111,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 	 */
 	protected List<Advisor> findCandidateAdvisors() {
 		Assert.state(this.advisorRetrievalHelper != null, "No BeanFactoryAdvisorRetrievalHelper available");
+		// 7.5.2 先尝试从helper获得，即从bean register中获得所有类型为Advisor的bean
 		return this.advisorRetrievalHelper.findAdvisorBeans();
 	}
 

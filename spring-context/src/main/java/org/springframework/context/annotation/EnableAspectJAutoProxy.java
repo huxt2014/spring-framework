@@ -120,6 +120,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Import(AspectJAutoProxyRegistrar.class)
+// 6.1 使用auto-config后，ConfigurationClassPostProcesso会自动处理相关config class，期间会加载
+// 加载org.springframework.boot.autoconfigure.aop.AopAutoConfiguration。这个config class
+// 会判断并使用EnableAspectJAutoProxy
+// 6.2 使用EnableAspectJAutoProxy会注册AspectJAutoProxyRegistrar.
 public @interface EnableAspectJAutoProxy {
 
 	/**

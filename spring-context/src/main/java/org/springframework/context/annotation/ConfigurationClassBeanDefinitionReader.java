@@ -135,13 +135,17 @@ class ConfigurationClassBeanDefinitionReader {
 		}
 
 		if (configClass.isImported()) {
+			// 2.9.1
 			registerBeanDefinitionForImportedConfigurationClass(configClass);
 		}
 		for (BeanMethod beanMethod : configClass.getBeanMethods()) {
+			// 2.9.2
 			loadBeanDefinitionsForBeanMethod(beanMethod);
 		}
 
+		// 2.9.3
 		loadBeanDefinitionsFromImportedResources(configClass.getImportedResources());
+		// 2.9.4
 		loadBeanDefinitionsFromRegistrars(configClass.getImportBeanDefinitionRegistrars());
 	}
 

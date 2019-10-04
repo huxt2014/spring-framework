@@ -31,6 +31,7 @@ import org.springframework.core.type.AnnotationMetadata;
  * @since 3.1
  * @see EnableAspectJAutoProxy
  */
+// 6.3 ConfigurationClassPostProcessor会处理@Import，其中一个步骤是找到并处理ImportBeanDefinitionRegistrar
 class AspectJAutoProxyRegistrar implements ImportBeanDefinitionRegistrar {
 
 	/**
@@ -42,10 +43,12 @@ class AspectJAutoProxyRegistrar implements ImportBeanDefinitionRegistrar {
 	public void registerBeanDefinitions(
 			AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
 
+		// 6.4 把已有的替换为AnnotationAwareAspectJAutoProxyCreator
 		AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(registry);
 
 		AnnotationAttributes enableAspectJAutoProxy =
 				AnnotationConfigUtils.attributesFor(importingClassMetadata, EnableAspectJAutoProxy.class);
+		// 6.5 设置BeanDefinition的相关属性
 		if (enableAspectJAutoProxy != null) {
 			if (enableAspectJAutoProxy.getBoolean("proxyTargetClass")) {
 				AopConfigUtils.forceAutoProxyCreatorToUseClassProxying(registry);

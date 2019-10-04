@@ -183,6 +183,7 @@ class ConfigurationClassParser {
 			}
 		}
 
+		// 2.8.7
 		this.deferredImportSelectorHandler.process();
 	}
 

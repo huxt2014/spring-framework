@@ -253,9 +253,9 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			processConfigBeanDefinitions((BeanDefinitionRegistry) beanFactory);
 		}
 
-		// 2.10 enhance一下
+		// 2.11 enhance一下
 		enhanceConfigurationClasses(beanFactory);
-		// 2.11 ImportAwareBeanPostProcessor
+		// 2.12 ImportAwareBeanPostProcessor
 		beanFactory.addBeanPostProcessor(new ImportAwareBeanPostProcessor(beanFactory));
 	}
 
@@ -334,6 +334,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 						registry, this.sourceExtractor, this.resourceLoader, this.environment,
 						this.importBeanNameGenerator, parser.getImportRegistry());
 			}
+			// 2.9 捞出所有的configuration class，把所有涉及到的class注册为bean
 			this.reader.loadBeanDefinitions(configClasses);
 			alreadyParsed.addAll(configClasses);
 
@@ -378,7 +379,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 * @see ConfigurationClassEnhancer
 	 */
 	public void enhanceConfigurationClasses(ConfigurableListableBeanFactory beanFactory) {
-		// 2.10.1 找到所有的@Configuration bean
+		// 2.11.1 找到所有的@Configuration bean
 		Map<String, AbstractBeanDefinition> configBeanDefs = new LinkedHashMap<>();
 		for (String beanName : beanFactory.getBeanDefinitionNames()) {
 			BeanDefinition beanDef = beanFactory.getBeanDefinition(beanName);
@@ -410,14 +411,14 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 				// Set enhanced subclass of the user-specified bean class
 				Class<?> configClass = beanDef.resolveBeanClass(this.beanClassLoader);
 				if (configClass != null) {
-					// 2.10.2 生成proxy
+					// 2.11.2 生成proxy
 					Class<?> enhancedClass = enhancer.enhance(configClass, this.beanClassLoader);
 					if (configClass != enhancedClass) {
 						if (logger.isTraceEnabled()) {
 							logger.trace(String.format("Replacing bean definition '%s' existing class '%s' with " +
 									"enhanced class '%s'", entry.getKey(), configClass.getName(), enhancedClass.getName()));
 						}
-						// 2.10.4 替换为proxy
+						// 2.11.4 替换为proxy
 						beanDef.setBeanClass(enhancedClass);
 					}
 				}
